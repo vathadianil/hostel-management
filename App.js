@@ -1,16 +1,52 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
 import CustomImage from "./components/CustomImage";
 import HostelImage from "./assets/images/hostel.png";
-import { useCallback } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { COLORS } from "./utils/styles/colors";
 import CustomInput from "./components/CustomInput";
 import CustomButton from "./components/CustomButton";
 import CustomFlatButton from "./components/CustomFlatButton";
+import AppContextProvider, { AppContext } from "./store/app-context";
+import LoadingOverlay from "./components/LoadingOverlay";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
+
+function Navigation() {
+  const appCtx = useContext(AppContext);
+
+  return (
+    <NavigationContainer>
+      {/* {appCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />} */}
+    </NavigationContainer>
+  );
+}
+
+function Root() {
+  const appCtx = useContext(AppContext);
+  const [isTokenFetching, setIsTokenFetching] = useState(true);
+  useEffect(() => {
+    async function fetchToken() {
+      setIsTokenFetching(true);
+      const storedData = await AsyncStorage.getItem("loginData");
+      const loginData = await JSON.parse(storedData);
+
+      if (loginData?.token) {
+        appCtx.authenticate(loginData);
+      }
+      setIsTokenFetching(false);
+    }
+    fetchToken();
+  }, []);
+  if (isTokenFetching) {
+    return <LoadingOverlay />;
+  }
+  return <Navigation />;
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -33,41 +69,47 @@ export default function App() {
     return null;
   }
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    //   <StatusBar style="auto" />
+    //   <CustomImage image={HostelImage} />
+    //   <Text style={styles.title}>HostelHub</Text>
+    //   <CustomInput
+    //     label={"Email"}
+    //     placeholder={"Email"}
+    //     style={{ marginBottom: 24 }}
+    //   />
+    //   <CustomInput label={"Password"} placeholder={"Password"} />
+    //   <CustomButton style={styles.btnContainer}>Login</CustomButton>
+    //   <View style={styles.flatBtnContainer}>
+    //     {/* <CustomFlatButton onPress={switchAuthModeHandler}>
+    //       {isLogin ? (
+    //         <Text>
+    //           <View>
+    //             <Text style={styles.normalText}>Create a</Text>
+    //           </View>
+    //           <View style={styles.btnHighlightContainer}>
+    //             <Text style={styles.btnHighlightText}>New Account</Text>
+    //           </View>
+    //         </Text>
+    //       ) : (
+    //         <Text>
+    //           <View style={styles.btnHighlightContainer}>
+    //             <Text style={styles.btnHighlightText}>Log In</Text>
+    //           </View>
+    //           <View>
+    //             <Text style={styles.normalText}>instead</Text>
+    //           </View>
+    //         </Text>
+    //       )}
+    //     </CustomFlatButton> */}
+    //   </View>
+    // </View>
+    <>
       <StatusBar style="auto" />
-      <CustomImage image={HostelImage} />
-      <Text style={styles.title}>HostelHub</Text>
-      <CustomInput
-        label={"Email"}
-        placeholder={"Email"}
-        style={{ marginBottom: 24 }}
-      />
-      <CustomInput label={"Password"} placeholder={"Password"} />
-      <CustomButton style={styles.btnContainer}>Login</CustomButton>
-      <View style={styles.flatBtnContainer}>
-        {/* <CustomFlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? (
-            <Text>
-              <View>
-                <Text style={styles.normalText}>Create a</Text>
-              </View>
-              <View style={styles.btnHighlightContainer}>
-                <Text style={styles.btnHighlightText}>New Account</Text>
-              </View>
-            </Text>
-          ) : (
-            <Text>
-              <View style={styles.btnHighlightContainer}>
-                <Text style={styles.btnHighlightText}>Log In</Text>
-              </View>
-              <View>
-                <Text style={styles.normalText}>instead</Text>
-              </View>
-            </Text>
-          )}
-        </CustomFlatButton> */}
-      </View>
-    </View>
+      <AppContextProvider>
+        <Root />
+      </AppContextProvider>
+    </>
   );
 }
 
