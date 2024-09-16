@@ -1,20 +1,18 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
-
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { COLORS } from "./utils/styles/colors";
 import AppContextProvider, { AppContext } from "./store/app-context";
 import LoadingOverlay from "./components/ui/LoadingOverlay";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
+import AuthStack from "./components/navigation/AuthStack";
 
 function Navigation() {
   const appCtx = useContext(AppContext);
-
   return (
     <NavigationContainer>
+      <AuthStack isLogin={true} />
       {/* {appCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />} */}
     </NavigationContainer>
   );
@@ -63,41 +61,6 @@ export default function App() {
     return null;
   }
   return (
-    // <View style={styles.container}>
-    //   <StatusBar style="auto" />
-    //   <CustomImage image={HostelImage} />
-    //   <Text style={styles.title}>HostelHub</Text>
-    //   <CustomInput
-    //     label={"Email"}
-    //     placeholder={"Email"}
-    //     style={{ marginBottom: 24 }}
-    //   />
-    //   <CustomInput label={"Password"} placeholder={"Password"} />
-    //   <CustomButton style={styles.btnContainer}>Login</CustomButton>
-    //   <View style={styles.flatBtnContainer}>
-    //     {/* <CustomFlatButton onPress={switchAuthModeHandler}>
-    //       {isLogin ? (
-    //         <Text>
-    //           <View>
-    //             <Text style={styles.normalText}>Create a</Text>
-    //           </View>
-    //           <View style={styles.btnHighlightContainer}>
-    //             <Text style={styles.btnHighlightText}>New Account</Text>
-    //           </View>
-    //         </Text>
-    //       ) : (
-    //         <Text>
-    //           <View style={styles.btnHighlightContainer}>
-    //             <Text style={styles.btnHighlightText}>Log In</Text>
-    //           </View>
-    //           <View>
-    //             <Text style={styles.normalText}>instead</Text>
-    //           </View>
-    //         </Text>
-    //       )}
-    //     </CustomFlatButton> */}
-    //   </View>
-    // </View>
     <>
       <StatusBar style="auto" />
       <AppContextProvider>
@@ -106,21 +69,3 @@ export default function App() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    color: COLORS.textColor,
-    fontSize: 28,
-    fontFamily: "semibold",
-    lineHeight: 42,
-  },
-  btnContainer: {
-    marginTop: 40,
-  },
-});
