@@ -3,16 +3,10 @@ import { StyleSheet } from "react-native";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-
-import CustomImage from "./components/CustomImage";
-import HostelImage from "./assets/images/hostel.png";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { COLORS } from "./utils/styles/colors";
-import CustomInput from "./components/CustomInput";
-import CustomButton from "./components/CustomButton";
-import CustomFlatButton from "./components/CustomFlatButton";
 import AppContextProvider, { AppContext } from "./store/app-context";
-import LoadingOverlay from "./components/LoadingOverlay";
+import LoadingOverlay from "./components/ui/LoadingOverlay";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 
