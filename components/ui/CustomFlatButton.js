@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
 
 const CustomFlatButton = ({ onPress, children }) => {
@@ -7,13 +7,15 @@ const CustomFlatButton = ({ onPress, children }) => {
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
       onPress={onPress}
     >
-      <View>
-        <Text style={styles.buttonText}>{children}</Text>
-      </View>
+      <Text style={styles.buttonText}>{children}</Text>
     </Pressable>
   );
 };
 
 export default CustomFlatButton;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  buttonText: {
+    textAlign: "center",
+  },
+});

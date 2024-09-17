@@ -12,7 +12,7 @@ function Navigation() {
   const appCtx = useContext(AppContext);
   return (
     <NavigationContainer>
-      <AuthStack isLogin={true} />
+      <AuthStack />
       {/* {appCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />} */}
     </NavigationContainer>
   );
